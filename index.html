@@ -1,0 +1,239 @@
+<html>
+    <head>
+        <title>
+            To do list practice
+        </title>
+        <style>
+            .heading{
+               color: #FFF2F2;
+               text-align: center;
+               margin-top: -2px;
+               text-decoration: overline;
+               cursor: pointer;
+            }
+            .heading:hover{
+               font-size: 35px;
+
+            }
+           
+            .input-body{
+                background-color: #A9B5DF;
+                height: 60px;
+                width: 50%;
+                padding: 15px 15px;
+               margin-top: 550px;
+               display: flex;
+               justify-content:center ;
+               margin-left: 350px;
+              border-radius: 15px ;  
+              cursor: url(./cursor2.0.png),progress;  
+              border:5px solid #FFF2F2;      
+                         
+            }
+            .input-container{
+                background-color:#E7EFC7;
+                height: 40px;
+                width: 200px;
+                margin: 15px 2px;
+                border-radius: 5px;
+               
+                font-size: 20px;
+                color: #2D336B;
+                border: 3px solid #2D336B;
+                
+                
+            }
+            .select-container{
+                margin: 15px 2px;
+                background-color: #2D336B;
+               height: 40px;
+               width: 120px;
+               margin-left: 10px;
+               border-radius: 5px;
+               border: none;
+              font-size: 20px;
+              cursor: pointer;    
+              color: #FFF2F2; 
+
+            }
+            .btn{
+                margin: 15px 2px;
+                height: 40px;
+                width: 120px;
+                border-radius: 5px;
+                margin-left: 10px;
+                border: none;
+                 font-size: 20px;
+                 background-color: #2D336B;
+                 cursor: pointer;    
+                 color:#E7EFC7 ; 
+            }
+            .btn:hover{
+                border: 5px solid #E7EFC7;
+                box-shadow: 5px 10px 5px 0px #2D336B;      
+                      }
+            .task-card{
+                display: flex;
+                justify-content: space-between;
+                height: 50px;
+                width: 700px;
+                background-color: #FFF2F2;
+                margin: 15px auto;
+                padding: 2px 2px;
+                border-radius: 15px 15px  15px 0;
+                border: 3px solid rgb(60, 41, 41);
+               cursor: pointer;
+                
+            }
+            .task-card-title{
+                font-size: 20px;
+                margin-top: 10px;
+                margin-left: 10px;
+                color: #2D336B;
+                
+                
+                 }
+            .task-card-priority{
+                font-size: 20px;
+            color: #2D336B;
+            margin-top: 10px;
+            text-align: center;
+            }
+            .bin-icon{
+                margin-top: 8px;
+                height: 30px;
+
+            }
+            @media (max-width:850px){
+                 .input-body{
+                height: 150px;
+                width: 50%;
+                padding: 15px 15px;
+              flex-direction: column;
+              align-items: center;
+             justify-content: left;
+             margin: 0 auto;
+                       
+            }
+            .input-container{
+               text-align: center;
+                width: 90%;
+                margin: 5px 2px;
+                padding: 2px 2px;
+                
+            }
+            .select-container{
+                margin: 10px 2px;
+                 width: 70%;
+                
+            }
+            .btn{
+                margin: 10px 2px;
+                 width: 40%;
+                  padding: 5px 5px;
+            }
+            .task-card{
+                height: 40px;
+                width: 450px;   
+            }
+            .task-card-title{
+                font-size: 18px;               
+                 }
+            .task-card-priority{
+                font-size: 18px;
+           
+            }
+            .bin-icon{
+                margin-top: 10px;
+                height: 20px;
+            }
+                
+            }
+        </style>
+    </head>
+    <body style=" background-color:#2D336B;  cursor: url(./cursor.png),auto; ">
+        <div style="display: flex; justify-content: center;">
+
+     <img src="./sticky-note (1).png" style="height: 50px; width: 50px; margin-right: 10px;">
+        <h1 class="heading">
+           
+            
+             To Do List
+        </h1>
+           </div>
+        <div class="to-do-list" id="to-do-list">
+
+        </div>
+        <div class="input-body">
+        <input type="text" class="input-container" id="input">
+        <select class="select-container" id="select">
+            <option  value="Do First">
+               Do First
+            </option>
+            <option  value="Schedule">
+                Schedule
+            </option>
+            <option  value="Delegate">
+                Delegate
+            </option>
+             <option  value="Eliminate">
+                Eliminate
+            </option>
+        </select>
+        
+        <button onclick="addToTask()" class="btn">
+            Add Task
+        </button>
+        </div>
+        <script>
+    let tasks = [];
+    const todolistElement = document.getElementById("to-do-list"); 
+
+    function addToTask() {
+        const inputElement = document.getElementById("input");
+        const selectElement = document.getElementById("select");
+
+        const newTask = {
+            input: inputElement.value,
+            select: selectElement.value || 'Delegate'
+        };
+
+        tasks.unshift(newTask);
+
+        localStorage.setItem("tasks", JSON.stringify(tasks));
+        displayScreen(tasks); 
+        inputElement.value = ''; 
+    }
+
+    const savedTask = localStorage.getItem("tasks"); 
+    if (savedTask) { 
+        tasks = JSON.parse(savedTask);
+        displayScreen(tasks); 
+    }
+
+    function displayScreen(taskList) {
+        todolistElement.innerHTML = ''; 
+
+        for (let i = 0; i < taskList.length; i++) { 
+            const taskObj = taskList[i];
+            todolistElement.innerHTML += `
+                <div class="task-card">
+                    <h2 class="task-card-title">
+                        ${taskObj.input}</h2> 
+                        <h2 class="task-card-priority">
+                        ${taskObj.select}
+                    </h2> 
+                    <img src="./trash.png" onClick="removeTask(${i})" class="bin-icon"/>
+                </div>
+            `;
+        }
+    }
+
+    function removeTask(taskIndex) {
+        tasks.splice(taskIndex, 1);
+        localStorage.setItem("tasks", JSON.stringify(tasks));
+        displayScreen(tasks); 
+    }
+</script>
+    </body>
+</html>
